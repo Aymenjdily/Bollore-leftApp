@@ -1,6 +1,8 @@
-import './globals.css'
+import { LoadingContextProvider } from '@/contexts/loadingContext'
+import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Loading } from '@/components/shared'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +18,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <LoadingContextProvider>
+        <body className={inter.className} suppressHydrationWarning={true}>
+          <Loading />
+          <main>
+            {children}
+          </main>
+        </body>
+      </LoadingContextProvider>
     </html>
   )
 }
