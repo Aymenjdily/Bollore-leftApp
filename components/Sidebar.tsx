@@ -3,8 +3,9 @@
 import { MdDashboard } from 'react-icons/md'
 import { BsFillEnvelopePaperFill } from 'react-icons/bs'
 import { FaBuilding, FaUsers, FaLightbulb, FaArrowUp } from 'react-icons/fa'
+import { MdLogout } from 'react-icons/md'
 import { sidebarlinks } from '@/constants'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -14,6 +15,7 @@ const Sidebar = () => {
     const pathname = usePathname()
     const [user, setUser] = useState<any>()
     const { setLoading } = useLoading()
+    const router = useRouter()
 
     useEffect(() => {
         setLoading(true)
@@ -32,6 +34,19 @@ const Sidebar = () => {
         fetchUser()
     }, [])
 
+    const logout = async () => {
+        try {
+          const res = await fetch(`/api/users/logout`, {
+            method: "GET"
+          })
+          if(res.ok){
+            router.push('/log-in')
+          }
+        } catch (error:any) {
+          console.log(error.message)
+        }
+    }
+
     return (
         <section className='p-10 flex flex-col items-start shadow-2xl rounded-tr-2xl'>
             <Image
@@ -42,36 +57,106 @@ const Sidebar = () => {
             />
             <div className='mt-[33px] flex flex-col space-y-[30px]'>
                 {
-                    sidebarlinks.map((item) => {
-                        const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
-                        return (
-                            <Link key={item.title} href={item.link} className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px] ${isActive ? "bg-[#1B59F81A] text-[#1B59F8] font-[500] duration-200" : ""}`}>
-                                {
-                                    item.icon === 1 && (
-                                        <MdDashboard className="text-lg" />
-                                    )
-                                }
-                                {
-                                    item.icon === 2 && (
-                                        <BsFillEnvelopePaperFill className="text-lg" />
-                                    )
-                                }
-                                {
-                                    item.icon === 3 && (
-                                        <FaBuilding className="text-lg" />
-                                    )
-                                }
-                                {
-                                    item.icon === 4 && (
-                                        <FaUsers className="text-lg" />
-                                    )
-                                }
-                                <p>
-                                    {item.title}
-                                </p>
-                            </Link>
-                        )
-                    })
+                    user && user.data.role == "super admin" && (
+                        sidebarlinks.map((item) => {
+                            const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
+                            return (
+                                <Link key={item.title} href={item.link} className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px] ${isActive ? "bg-[#1B59F81A] text-[#1B59F8] font-[500] duration-200" : ""}`}>
+                                    {
+                                        item.icon === 1 && (
+                                            <MdDashboard className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 2 && (
+                                            <BsFillEnvelopePaperFill className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 3 && (
+                                            <FaBuilding className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 4 && (
+                                            <FaUsers className="text-lg" />
+                                        )
+                                    }
+                                    <p>
+                                        {item.title}
+                                    </p>
+                                </Link>
+                            )
+                        })
+                    )
+                }
+                {
+                    user && user.data.role == "admin" && (
+                        sidebarlinks.slice(0,3).map((item) => {
+                            const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
+                            return (
+                                <Link key={item.title} href={item.link} className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px] ${isActive ? "bg-[#1B59F81A] text-[#1B59F8] font-[500] duration-200" : ""}`}>
+                                    {
+                                        item.icon === 1 && (
+                                            <MdDashboard className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 2 && (
+                                            <BsFillEnvelopePaperFill className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 3 && (
+                                            <FaBuilding className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 4 && (
+                                            <FaUsers className="text-lg" />
+                                        )
+                                    }
+                                    <p>
+                                        {item.title}
+                                    </p>
+                                </Link>
+                            )
+                        })
+                    )
+                }
+                {
+                    user && user.data.role == "user" && (
+                        sidebarlinks.slice(0,2).map((item) => {
+                            const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
+                            return (
+                                <Link key={item.title} href={item.link} className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px] ${isActive ? "bg-[#1B59F81A] text-[#1B59F8] font-[500] duration-200" : ""}`}>
+                                    {
+                                        item.icon === 1 && (
+                                            <MdDashboard className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 2 && (
+                                            <BsFillEnvelopePaperFill className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 3 && (
+                                            <FaBuilding className="text-lg" />
+                                        )
+                                    }
+                                    {
+                                        item.icon === 4 && (
+                                            <FaUsers className="text-lg" />
+                                        )
+                                    }
+                                    <p>
+                                        {item.title}
+                                    </p>
+                                </Link>
+                            )
+                        })
+                    )
                 }
             </div>
             <div className='mt-[60px]'>
@@ -96,8 +181,8 @@ const Sidebar = () => {
                             {user && user.data.role}
                         </p>
                     </div>
-                    <button>
-                        <FaArrowUp />
+                    <button onClick={logout} className='bg-red-500 text-white p-2 rounded-xl hover:bg-red-400 duration-300 text-xl'>
+                        <MdLogout />
                     </button>
                 </div>
             </div>

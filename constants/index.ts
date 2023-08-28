@@ -10,13 +10,22 @@ export const sidebarlinks = [
         link: "/Demandes"
     },
     {
+        icon: 4,
+        title: "utitlisateurs",
+        link: "/Utilisateurs"
+    },
+    {
         icon: 3,
         title: "departments",
         link: "/Department"
     },
+]
+
+export const DemandeTypes = [
     {
-        icon: 4,
-        title: "utitlisateurs",
-        link: "/Utilisateurs"
+        title: "Day Out"
+    },
+    {
+        title: "Congé"
     }
 ]

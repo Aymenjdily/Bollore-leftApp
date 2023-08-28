@@ -3,7 +3,7 @@ import React from 'react'
 
 const DashCard = ({ title, number }: CardP) => {
   return (
-    <div>DashCard</div>
+    <div className='bg-white p-10'>DashCard</div>
   )
 }
 

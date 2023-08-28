@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useParams } from 'next/navigation'
 import { useDepartment } from '@/hooks/useDepartment'
+import Link from 'next/link'
 
 const UpdateDepartment = () => {
     const [title, setTitle] = useState('')
@@ -61,7 +62,10 @@ const UpdateDepartment = () => {
 
     return (
         <section className='py-12'>
-            <h1 className='text-2xl font-bold'>
+            <Link href="/Department" className="underline cursor-pointer font-bold text-[#FF2366]">
+                Retour
+            </Link>
+            <h1 className='text-2xl font-bold mt-10'>
                 Ajouter un Département
             </h1>
             <div>

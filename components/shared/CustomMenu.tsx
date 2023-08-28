@@ -10,16 +10,16 @@ const CustomMenu = ({
 } : CustomFieldProps) => {
   return (
     <div className='flex items-center justify-start flex-col w-full gap-3 relative'>
-        <label htmlFor={title} className='w-full capitalize font-semibold text-black'>
+        <label htmlFor={title} className='w-full capitalize text-black'>
             {title}
         </label>
         <Menu
             as="div"
-            className="self-start relative"
+            className="self-start relative w-full"
         >
             <div>
-               <Menu.Button className="flex justify-center items-center custom_menu-btn">
-                    {state || `Select a ${title}`}
+               <Menu.Button className="flex justify-between items-center custom_menu-btn">
+                    {state || `${title}`}
                     <Image
                         src="/down.svg"
                         width={17}

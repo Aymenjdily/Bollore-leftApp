@@ -4,6 +4,7 @@ import { CustomButton, CustomInput } from '@/components/shared'
 import { useDepartment } from '@/hooks/useDepartment'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const CreateDepartment = () => {
     const [title, setTitle] = useState('')
@@ -49,7 +50,10 @@ const CreateDepartment = () => {
 
     return (
         <section className='py-12'>
-            <h1 className='text-2xl font-bold'>
+            <Link href="/Department" className="underline cursor-pointer font-bold text-[#FF2366]">
+                Retour
+            </Link>
+            <h1 className='text-2xl font-bold mt-10'>
                 Ajouter un Département
             </h1>
             <div>

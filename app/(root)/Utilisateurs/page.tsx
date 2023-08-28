@@ -3,22 +3,45 @@
 import Link from "next/link"
 import { CustomButton, Pagination } from "@/components/shared"
 import { useUsers } from "@/hooks/useUsers"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useLoading } from "@/hooks/useLoading"
 
 const Utilisateurs = () => {
     const { users } = useUsers()
+    const [user, setUser] = useState<any>()
+    const filteredUsersAdmin = users && users.filter((item:any) => {
+        return item.department === user?.data.department
+    })
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 7
     const lastIndex = currentPage * itemsPerPage
     const firstIndex = lastIndex - itemsPerPage
-    const items = users && users.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(users && users.length / itemsPerPage)
+    const items = user && user.data.role === "super admin" ? users && users.slice(firstIndex, lastIndex) : filteredUsersAdmin && filteredUsersAdmin.slice(firstIndex, lastIndex)
+    const npage = user && user.data.role === "super admin" ? Math.ceil(users && users.length / itemsPerPage) : Math.ceil(filteredUsersAdmin && filteredUsersAdmin.length / itemsPerPage)
     // @ts-ignore
     const numbers = [...Array(npage + 1).keys()].slice(1)
+
+    const { dispatch } = useUsers()
+    const { setLoading } = useLoading()
 
     const changePage = (n:any) => {
         setCurrentPage(n)
     }
+
+    useEffect(() => {
+        setLoading(true)
+        const fetchUser = async () => {
+          const res = await fetch('/api/users/getUser')
+          const data = await res.json()
+    
+          if(res.ok){
+            setUser(data)
+            setLoading(false)
+          }
+        }
+    
+        fetchUser()
+    }, [])
 
     const headsDemandes = [
         {
@@ -35,20 +58,47 @@ const Utilisateurs = () => {
         }
     ]
 
+    const handleDelete = async (user:any) => {
+        const hasConfirmed = confirm("Are you sure you want to delete this Department ?")
+
+        if(hasConfirmed){
+            try{
+                await fetch(`/api/users/${user._id.toString()}`,{
+                    method: 'DELETE'
+                })
+
+                const filteredPosts = users && users.filter((item:any) => item._id !== user._id)
+
+
+                dispatch({
+                    type:'SET_USER',
+                    payload:filteredPosts
+                })
+            }
+            catch(error){
+                console.log(error)
+            }
+        }
+    }
+
     return (
         <section className='py-10'>
             <div className='flex justify-between items-center'>
                 <h1 className='text-xl font-bold capitalize text-gray-500'>
                     Utilisateurs
                 </h1>
-                <div>
-                    <Link href="/Utilisateurs/create">
-                        <CustomButton
-                            type='button'
-                            title="Ajouter"
-                        />
-                    </Link>
-                </div>
+                {
+                    user && user.data.role === "super admin" && (
+                        <div>
+                            <Link href="/Utilisateurs/create">
+                                <CustomButton
+                                    type='button'
+                                    title="Ajouter"
+                                />
+                            </Link>
+                        </div>
+                    )
+                }
             </div>
             <div className='mt-10'>
                 <table className="w-full">
@@ -86,11 +136,9 @@ const Utilisateurs = () => {
                                     </td>
                                     <td className="px-4 py-4 text-ms font-semibold border">
                                         <div className='flex items-center gap-8'>
-                                            <Link href={`/Demandes/${item._id}`}>
-                                                <span className='underline text-sm cursor-pointer'>
-                                                    Voir l'utilisateur
-                                                </span>
-                                            </Link>
+                                            <span className='underline text-sm cursor-pointer' onClick={() => handleDelete(item)}>
+                                                Supprimer
+                                            </span>
                                             {/* <Link href={`/Demandes/${item._id}`}>
                                                 <span className='underline text-sm cursor-pointer'>
                                                     Modifier

@@ -1,25 +1,50 @@
 "use client"
 
-import { Pagination } from "@/components/shared"
+import { CustomButton, Pagination } from "@/components/shared"
 import { useDemande } from "@/hooks/useDemande"
+import { useLoading } from "@/hooks/useLoading"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const Demandes = () => {
-
+    const [user, setUser] = useState<any>()
     const { demandes } = useDemande()
+    const filteredDemandessAdmin = demandes && demandes.filter((item:any) => {
+        return item.department === user?.data.department
+    })
+    const filteredDemandesUser = demandes && demandes.filter((item:any) => {
+        return item.creator.email === user?.data.email
+    })
+    const { setLoading } = useLoading()
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 7
     const lastIndex = currentPage * itemsPerPage
     const firstIndex = lastIndex - itemsPerPage
-    const items = demandes && demandes.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(demandes && demandes.length / itemsPerPage)
+    const items = user && user.data.role === "super admin" && demandes && demandes.slice(firstIndex, lastIndex) || user && user.data.role === "admin" && filteredDemandessAdmin && filteredDemandessAdmin.slice(firstIndex, lastIndex) || user && user.data.role === "user" && filteredDemandesUser && filteredDemandesUser.slice(firstIndex, lastIndex)
+    const npage = user && user.data.role === "super admin" && Math.ceil(demandes && demandes.length / itemsPerPage) || user && user.data.role === "user" && Math.ceil(filteredDemandesUser && filteredDemandesUser.length / itemsPerPage) || Math.ceil(filteredDemandessAdmin && filteredDemandessAdmin.length / itemsPerPage)
+
+    console.log(demandes)
     // @ts-ignore
     const numbers = [...Array(npage + 1).keys()].slice(1)
 
     const changePage = (n:any) => {
         setCurrentPage(n)
     }
+
+    useEffect(() => {
+        setLoading(true)
+        const fetchUser = async () => {
+          const res = await fetch('/api/users/getUser')
+          const data = await res.json()
+    
+          if(res.ok){
+            setUser(data)
+            setLoading(false)
+          }
+        }
+    
+        fetchUser()
+    }, [])
 
     const headsDemandes = [
         {
@@ -42,9 +67,29 @@ const Demandes = () => {
                 <h1 className='text-xl font-bold capitalize text-gray-500'>
                     Demandes
                 </h1>
+                {
+                    user && user.data.role === "user" && (
+                        <Link href="/Demandes/create">
+                            <CustomButton
+                                type="button"
+                                title="Ajouter"
+                            />
+                        </Link>
+                    )
+                }
+                {
+                    user && user.data.role === "admin" && (
+                        <Link href="/Demandes/create">
+                            <CustomButton
+                                type="button"
+                                title="Ajouter"
+                            />
+                        </Link>
+                    )
+                }
             </div>
             <div className='mt-10'>
-                <table className="w-full">
+                <table className="w-full shadow-lg">
                     <thead>
                         <tr className="tracking-wide text-left text-gray-900 bg-gray-100 border-b border-gray-600">
                             {

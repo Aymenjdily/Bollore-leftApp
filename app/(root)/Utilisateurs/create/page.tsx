@@ -5,6 +5,8 @@ import { CustomButton, CustomInput } from '@/components/shared'
 import CustomMenu from '@/components/shared/CustomMenu'
 import { useDepartment } from '@/hooks/useDepartment'
 import { useRouter } from 'next/navigation'
+import { useUsers } from '@/hooks/useUsers'
+import Link from 'next/link'
 
 const CreateUser = () => {
     const [submitting, setSubmitting] = useState(false)
@@ -16,6 +18,8 @@ const CreateUser = () => {
     const [role, setRole] = useState('Admin')
     const [department, setDepartment] = useState('')
     const [days, setDays] = useState('')
+
+    const { dispatch } = useUsers()
 
     const { departments } = useDepartment()
     const router = useRouter()
@@ -57,10 +61,10 @@ const CreateUser = () => {
                 setDepartment('')
                 setDays('')
 
-                // dispatch({
-                //     type:'CREATE_USER',
-                //     payload: data
-                // })
+                dispatch({
+                    type:'CREATE_USER',
+                    payload: data
+                })
 
                 router.push('/Utilisateurs')
             }
@@ -73,13 +77,16 @@ const CreateUser = () => {
 
     return (
         <section className='py-12'>
-            <h1 className='text-2xl font-bold'>
-                Ajouter un Utilisateur
-            </h1>
             <div>
-                <form className='w-100' onSubmit={CreateUser}>
+                <form className='w-[500px] shadow-lg p-10 rounded-xl bg-white' onSubmit={CreateUser}>
+                    <Link href="/Utilisateurs" className="underline cursor-pointer font-bold text-[#FF2366]">
+                        Retour
+                    </Link>
+                    <h1 className='text-2xl font-bold mt-10'>
+                        Ajouter un Utilisateur
+                    </h1>
                     <div className='mt-10 flex flex-col space-y-8 items-start'>
-                        <div className='flex flex-row gap-5'>    
+                        <div className='flex flex-row gap-5 w-full'>    
                             <CustomInput
                                 title='Email'
                                 type="email"
@@ -95,7 +102,7 @@ const CreateUser = () => {
                                 width='w-full'
                             />
                         </div>
-                        <div className='flex flex-row gap-5'>    
+                        <div className='flex flex-row gap-5 w-full'>    
                             <CustomInput
                                 title='Password'
                                 type="text"
@@ -111,7 +118,7 @@ const CreateUser = () => {
                                 width='w-full'
                             />
                         </div>
-                        <div className='flex flex-row gap-10'>
+                        <div className='flex flex-row w-full gap-5'>
                             <CustomMenu
                                 title="Departement"
                                 state={department}
