@@ -3,11 +3,11 @@ import { connectToDB } from "@/utils/connecttodb";
 import { NextRequest } from "next/server";
 
 export const POST = async (request:NextRequest) => {
-    const { title } = await request.json();
+    const { title, company } = await request.json();
 
     try {
         await connectToDB();
-        const newDepartment = new Department({ title });
+        const newDepartment = new Department({ title, company });
 
         await newDepartment.save();
         return new Response(JSON.stringify(newDepartment), { status: 201 })

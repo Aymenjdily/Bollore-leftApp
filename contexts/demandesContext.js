@@ -25,26 +25,9 @@ export const DemandeReducer = (state, action) => {
 
 export const DemandeContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(DemandeReducer, {
-        demandes: null
+        demandes: []
     })
 
-    useEffect(() => {
-        const fetchDemandes = async () => {
-          const res = await fetch('/api/demande')
-          const data = await res.json()
-    
-          if(res.ok){
-            dispatch({
-                type:'SET_DEMANDE',
-                payload:data
-            })
-          }
-        }
-    
-        fetchDemandes()
-    }, [])
-    
-    
     return(
         <DemandeContext.Provider value={{...state, dispatch}}>
             {children}

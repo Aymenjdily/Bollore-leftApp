@@ -1,10 +1,5 @@
 export const sidebarlinks = [
     {
-        icon: 1,
-        title: "dashboard",
-        link: "/"
-    },
-    {
         icon: 2,
         title: "demandes",
         link: "/Demandes"
@@ -19,13 +14,39 @@ export const sidebarlinks = [
         title: "departments",
         link: "/Department"
     },
+    {
+        icon: 2,
+        title: "A demandes",
+        link: "/A-Demandes"
+    },
 ]
 
 export const DemandeTypes = [
     {
-        title: "Day Out"
+        title: "absence"
     },
     {
-        title: "Congé"
-    }
+        title: "congé"
+    },
+    {
+        title: "heures"
+    },
+    {
+        title: "demi-journée"
+    },
+]
+
+export const Companies = [
+    {
+        title:"Entreprise A"
+    },
+    {
+        title:"Entreprise B"
+    },
+    {
+        title:"Entreprise C"
+    },
+    {
+        title:"Entreprise D"
+    },
 ]

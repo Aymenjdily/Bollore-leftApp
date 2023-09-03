@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CustomButton, CustomInput } from '@/components/shared'
 import CustomMenu from '@/components/shared/CustomMenu'
 import { useDepartment } from '@/hooks/useDepartment'
@@ -9,8 +9,9 @@ import { useUsers } from '@/hooks/useUsers'
 import Link from 'next/link'
 import { Menu } from '@headlessui/react'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
 
-const CreateUser = () => {
+const UpdateUser = () => {
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState('')
 
@@ -24,6 +25,7 @@ const CreateUser = () => {
 
     const { departments } = useDepartment()
     const router = useRouter()
+    const searchParams = useParams()
 
     const Roles = [
         {
@@ -37,6 +39,24 @@ const CreateUser = () => {
         },
     ]
 
+    useEffect(() => {
+        const getDepartment = async () => {
+            const res = await fetch(`/api/users/${searchParams.id}`)
+
+            const data = await res.json()
+
+            if(res.ok) {
+                setEmail(data.email)
+                setFullName(data.fullName)
+                setPassword(data.password)
+            }
+
+            console.log(data)
+        }
+
+        if(searchParams.id) getDepartment()
+    }, [searchParams.id])
+
     const CreateUser = async (e:any) => {
         e.preventDefault()
 
@@ -44,7 +64,7 @@ const CreateUser = () => {
 
         try {
             const res = await fetch(`/api/users/signup`, {
-                method: "POST",
+                method: "PATCH",
                 body: JSON.stringify({
                     email: email,
                     fullName: fullName,
@@ -181,4 +201,4 @@ const CreateUser = () => {
     )
 }
 
-export default CreateUser
+export default UpdateUser

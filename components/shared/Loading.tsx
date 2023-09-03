@@ -11,7 +11,7 @@ const Loading = () => {
     loading && (
       <div className='absolute bg-white z-10 w-full h-full flex items-center justify-center'>
         <ReactLoading
-          type='spokes'
+          type='bubbles'
           color='#FF5789'
           width={100}
           height={100}

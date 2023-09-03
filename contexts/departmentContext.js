@@ -25,24 +25,8 @@ export const DepartmentReducer = (state, action) => {
 
 export const DepartmentContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(DepartmentReducer, {
-        departments: null
+        departments: []
     })
-
-    useEffect(() => {
-        const fetchDepartments = async () => {
-            const res = await fetch('/api/department')
-            const data = await res.json()
-        
-            if(res.ok){
-              dispatch({
-                  type:'SET_DEPARTMENT',
-                  payload:data
-              })
-            }
-        }
-
-        fetchDepartments()
-    }, [])
     
     return(
         <DepartmentContext.Provider value={{...state, dispatch}}>

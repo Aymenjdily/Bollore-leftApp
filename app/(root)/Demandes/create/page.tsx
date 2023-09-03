@@ -10,22 +10,17 @@ import { useLoading } from '@/hooks/useLoading';
 import { useDemande } from '@/hooks/useDemande';
 
 const CreateDemande = () => {
-    const [title, setTitle] = useState('')
     const [reason, setReason] = useState('')
+    const [dateDepart, setDateDepart] = useState(new Date())
+    const [dateFin, setDateFin] = useState(new Date())
+    const [dateReprise, setDateReprise] = useState(new Date())
     const [type, setType] = useState('')
-    const [value, setValue]:any = useState({ 
-        startDate: new Date(), 
-        endDate: new Date().setMonth(11) 
-    });
+
     const [user, setUser] = useState<any>()
     const router = useRouter()
     const { setLoading } = useLoading()
     const state = "pending"
     const { dispatch } = useDemande()
-
-    const handleValueChange = (newValue:any) => {
-        setValue(newValue); 
-    }
 
     useEffect(() => {
         setLoading(true)
@@ -49,14 +44,14 @@ const CreateDemande = () => {
             const response = await fetch("/api/demande/new", {
               method: "POST",
               body: JSON.stringify({
-                title: title,
                 userId: user?.data._id,
                 type: type,
                 reason: reason,
-                dateDepart: value.startDate,
-                dateRetour: value.endDate,
+                dateDepart: dateDepart,
+                dateRetour: dateFin,
+                dateReprise: dateReprise,
                 state: state,
-                department: user?.data.department
+                validator: "Non validator"
               }),
             });
 
@@ -64,7 +59,7 @@ const CreateDemande = () => {
       
             if (response.ok) {
                 dispatch({
-                    type:'SET_DEMANDE',
+                    type:'CREATE_DEMANDE',
                     payload:data
                 })
                 router.push("/Demandes");
@@ -79,59 +74,60 @@ const CreateDemande = () => {
 
     return (
         <section className='py-12'>
-            <form action="" onSubmit={create} className='w-[500px] shadow-lg p-10 rounded-xl'>
-                <Link href="/Demandes" className="underline cursor-pointer font-bold text-[#FF2366]">
-                    Retour
-                </Link>
-                <h1 className='text-2xl font-bold mt-10'>
-                    Create Demande
-                </h1>
+            <form action="" onSubmit={create} className='w-[600px] border-2 shadow-lg p-10 rounded-xl'>
+                <div className='flex justify-between mb-10'>
+                    <Link href="/Demandes" className="underline cursor-pointer font-bold text-[#FF2366]">
+                        Retour
+                    </Link>
+                    <h1 className='font-bold'>
+                        Créer une demande
+                    </h1>
+                </div>
 
-                <div className='mt-10 flex flex-col gap-5'>
-                    <div className='flex flex-row items-center gap-5'>
-                        <CustomInput
-                            title="Title"
-                            type="text"
-                            width='w-full'
-                            setState={setTitle}
-                            state={title}
-                        />
-                        <CustomInput
-                            title="Reason"
-                            type="text"
-                            width='w-full'
-                            setState={setReason}
-                            state={reason}
-                        />
-                    </div>
-                    <div className='flex flex-row items-center gap-5'>
+                <div className='flex flex-col gap-5'>
+                    <div>
                         <CustomMenu
-                            title="Type"
                             filters={DemandeTypes}
-                            setState={setType}
                             state={type}
-                        />
-                        <div className='flex items-center gap-10'>
-                            <div className='flex flex-col gap-3'>
-                                <label htmlFor="" className='font-semibold'>
-                                    Date départ et Retour
-                                </label>
-                                <Datepicker 
-                                    primaryColor={"blue"} 
-                                    value={value} 
-                                    onChange={handleValueChange}
-                                    containerClassName={""}
-                                    inputClassName={"outline-none   py-3 bg-white text-black font-semibold px-8 border border-2 rounded-lg"}
-                                /> 
-                            </div>
-                        </div>
-                    </div>
-                    <div className='mt-5'>
-                        <CustomButton
-                            type="submit"
-                            title="Ajouter"
+                            setState={setType}
+                            title='Type de demande'
                         />
                     </div>
+                    <div className='flex items-center gap-5'>
+                        <CustomInput
+                            type='date'
+                            state={dateDepart}
+                            setState={setDateDepart}
+                            title='Date de départ'
+                        />
+                        <CustomInput
+                            type='date'
+                            state={dateFin}
+                            setState={setDateFin}
+                            title='Date de fin'
+                        />
+                    </div>
+                    <CustomInput
+                        type='date'
+                        state={dateReprise}
+                        setState={setDateReprise}
+                        title='Date de reprise'
+                    />
+                    {
+                        type === "heures" && (
+                            <CustomInput
+                                isTextArea={true}
+                                type=""
+                                state={reason}
+                                setState={setReason}
+                                title='Raison ( champs obligatoire )'
+                            />
+                        )
+                    }
+                    <CustomButton
+                        title='Ajouter'
+                        type="submit"
+                    />
                 </div>
             </form>
         </section>

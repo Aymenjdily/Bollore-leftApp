@@ -46,7 +46,7 @@ const page = () => {
             setError(null)
             setsuccess('You Connect Successfully')
             // fetchUser()
-            router.push('/')
+            router.push('/Demandes')
         }
 
         if(!res.ok){

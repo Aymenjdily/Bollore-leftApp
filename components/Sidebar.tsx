@@ -34,6 +34,8 @@ const Sidebar = () => {
         fetchUser()
     }, [])
 
+    console.log(user)
+
     const logout = async () => {
         try {
           const res = await fetch(`/api/users/logout`, {
@@ -57,7 +59,7 @@ const Sidebar = () => {
             />
             <div className='mt-[33px] flex flex-col space-y-[30px]'>
                 {
-                    user && user.data.role == "super admin" && (
+                    user && user?.data.role == "RH" && (
                         sidebarlinks.map((item) => {
                             const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
                             return (
@@ -91,8 +93,8 @@ const Sidebar = () => {
                     )
                 }
                 {
-                    user && user.data.role == "admin" && (
-                        sidebarlinks.slice(0,3).map((item) => {
+                    user && user?.data.role == "responsable" && (
+                        sidebarlinks.slice(0,2).map((item) => {
                             const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
                             return (
                                 <Link key={item.title} href={item.link} className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px] ${isActive ? "bg-[#1B59F81A] text-[#1B59F8] font-[500] duration-200" : ""}`}>
@@ -125,8 +127,8 @@ const Sidebar = () => {
                     )
                 }
                 {
-                    user && user.data.role == "user" && (
-                        sidebarlinks.slice(0,2).map((item) => {
+                    user && user?.data.role == "employé" && (
+                        sidebarlinks.slice(0,1).map((item) => {
                             const isActive = (pathname.includes(item.link) && item.link.length > 1) || pathname === item.link
                             return (
                                 <Link key={item.title} href={item.link} className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px] ${isActive ? "bg-[#1B59F81A] text-[#1B59F8] font-[500] duration-200" : ""}`}>
@@ -160,7 +162,7 @@ const Sidebar = () => {
                 }
             </div>
             <div className='mt-[60px]'>
-                <p className='font-[600] text-gray-400'>Support</p>
+                <p className='font-[600] text-gray-400'>Notre Support</p>
                 <div className='mt-[25px]'>
                     <Link href="/support" className={`flex items-center gap-[16px] px-5 w-[190px] h-[46px] text-[14px] capitalize rounded-[18px]`}>
                         <FaLightbulb className="text-lg" />
@@ -174,11 +176,11 @@ const Sidebar = () => {
                 <div className='flex justify-between border-t-2 border-black w-full shadow-lg px-5 py-4 rounded-xl'>
                     <div className='flex flex-col'>
                         <h1 className='text-[14px] capitalize font-bold leading-[18px]'>
-                            {user && user.data.fullName}
+                            {user && user?.data.fullName}
                         </h1>
                         <p className='text-gray-500 capitalize
                          text-[12px]'>
-                            {user && user.data.role}
+                            {user && user.data?.role}
                         </p>
                     </div>
                     <button onClick={logout} className='bg-red-500 text-white p-2 rounded-xl hover:bg-red-400 duration-300 text-xl'>

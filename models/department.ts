@@ -3,7 +3,11 @@ import { Schema, model, models } from "mongoose";
 const DepartmentSchema = new Schema({
     title: {
         type: String,
-        required: [true, "Department Title is Required ! "]
+        required: [true, "Le titre du département est requis ! "]
+    },
+    company: {
+        type: String,
+        required: [true, "L'entreprise du département est requis !"]
     }
 }, {
     timestamps: true

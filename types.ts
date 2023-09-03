@@ -1,9 +1,10 @@
 export type InputP = {
     title: string;
     type: string;
-    width: string;
-    state: string;
-    setState: (state: string) => void
+    width?: string;
+    state: any;
+    setState: (state: any) => void;
+    isTextArea?: boolean
 }
 
 export type ButtonP = {

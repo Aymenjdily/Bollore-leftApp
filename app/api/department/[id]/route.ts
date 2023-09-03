@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
 }
 
 export const PATCH = async (req: NextRequest, {params}:any) => {
-    const { title } = await req.json()
+    const { title, company } = await req.json()
 
     try{
         await connectToDB()
@@ -32,6 +32,7 @@ export const PATCH = async (req: NextRequest, {params}:any) => {
         }
 
         existDepartment.title = title
+        existDepartment.company = company
 
         await existDepartment.save()
 

@@ -10,7 +10,7 @@ const CustomMenu = ({
 } : CustomFieldProps) => {
   return (
     <div className='flex items-center justify-start flex-col w-full gap-3 relative'>
-        <label htmlFor={title} className='w-full capitalize text-black'>
+        <label htmlFor={title} className='w-full text-sm text-black'>
             {title}
         </label>
         <Menu

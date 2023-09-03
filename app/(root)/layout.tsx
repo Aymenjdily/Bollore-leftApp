@@ -30,7 +30,7 @@ export default function RootLayout({
         <DepartmentContextProvider>
           <DemandeContextProvider>
             <UsersContextProvider>
-              <body className={`${inter.className} flex h-screen`} suppressHydrationWarning={true}>
+              <body className={`${inter.className} flex min-h-screen max-h-full`} suppressHydrationWarning={true}>
                 <Loading />
                 <Sidebar />
                 <main className='container px-10 py-6 mx-auto'>

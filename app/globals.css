@@ -22,9 +22,9 @@
 }
 
 .custom_menu-items {
-  @apply flex-col absolute left-0 mt-2 sm:min-w-[300px] w-fit max-h-64 origin-top-right rounded-xl bg-white border border-gray-400 shadow-xl overflow-y-auto;
+  @apply flex-col absolute left-0 mt-2 w-full max-h-64 origin-top-right rounded-xl bg-white border border-gray-400 shadow-xl overflow-y-auto;
 }
 
 .custom_menu-item {
-  @apply text-left  px-5 py-2 text-sm hover:bg-gray-200 self-start whitespace-nowrap capitalize;
+  @apply text-left w-full px-5 py-2 text-sm hover:bg-gray-200 self-start whitespace-nowrap capitalize;
 }

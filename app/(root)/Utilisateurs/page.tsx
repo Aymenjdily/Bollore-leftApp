@@ -5,28 +5,27 @@ import { CustomButton, Pagination } from "@/components/shared"
 import { useUsers } from "@/hooks/useUsers"
 import { useState, useEffect } from "react"
 import { useLoading } from "@/hooks/useLoading"
+import ReactPaginate from 'react-paginate'
 
 const Utilisateurs = () => {
     const { users } = useUsers()
     const [user, setUser] = useState<any>()
     const filteredUsersAdmin = users && users.filter((item:any) => {
-        return item.department === user?.data.department
+        return item.department === user?.data.department 
     })
-    const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 7
-    const lastIndex = currentPage * itemsPerPage
-    const firstIndex = lastIndex - itemsPerPage
-    const items = user && user.data.role === "super admin" ? users && users.slice(firstIndex, lastIndex) : filteredUsersAdmin && filteredUsersAdmin.slice(firstIndex, lastIndex)
-    const npage = user && user.data.role === "super admin" ? Math.ceil(users && users.length / itemsPerPage) : Math.ceil(filteredUsersAdmin && filteredUsersAdmin.length / itemsPerPage)
-    // @ts-ignore
-    const numbers = [...Array(npage + 1).keys()].slice(1)
+    console.log(user)
+    const [pageNumber, setpageNumber] = useState(0)
+    const peopleperpage = 40
+    const pagevisited = pageNumber * peopleperpage
+    const displaypeople = user?.data.role === "responsable" ? filteredUsersAdmin && filteredUsersAdmin.slice(pagevisited, pagevisited + peopleperpage) : users && users.slice(pagevisited, pagevisited + peopleperpage)
+    const pagecount = Math.ceil(displaypeople && displaypeople.length / peopleperpage)
+  
+    const changePage = ({ selected }: any) => {
+      setpageNumber(selected)
+    }
 
     const { dispatch } = useUsers()
     const { setLoading } = useLoading()
-
-    const changePage = (n:any) => {
-        setCurrentPage(n)
-    }
 
     useEffect(() => {
         setLoading(true)
@@ -45,13 +44,13 @@ const Utilisateurs = () => {
 
     const headsDemandes = [
         {
-            title: "Name"
+            title: "Nom et Prénom"
+        },
+        {
+            title: "Email"
         },
         {
             title: "Role"
-        },
-        {
-            title: "Département"
         },
         {
             title: "Actions"
@@ -81,14 +80,30 @@ const Utilisateurs = () => {
         }
     }
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+          const res = await fetch('/api/users')
+          const data = await res.json()
+    
+          if(res.ok){
+            dispatch({
+                type:'SET_USER',
+                payload:data
+            })
+          }
+        }
+    
+        fetchUsers()
+    }, [])
+
     return (
         <section className='py-10'>
             <div className='flex justify-between items-center'>
-                <h1 className='text-xl font-bold capitalize text-gray-500'>
-                    Utilisateurs
+                <h1 className='font-bold capitalize text-gray-500'>
+                    Notre Utilisateurs
                 </h1>
                 {
-                    user && user.data.role === "super admin" && (
+                    user && user.data.role === "RH" && (
                         <div>
                             <Link href="/Utilisateurs/create">
                                 <CustomButton
@@ -115,7 +130,7 @@ const Utilisateurs = () => {
                     </thead>
                     <tbody className="bg-white">
                         {
-                            items && items.map((item: any) => (
+                            displaypeople && displaypeople.map((item: any) => (
                                 <tr key={item._id} className="text-gray-700">
                                     <td className="px-4 py-4 border">
                                         <div className="flex items-center text-sm">
@@ -125,20 +140,26 @@ const Utilisateurs = () => {
                                         </div>
                                     </td>
                                     <td className="px-4 py-4 text-xs border">
+                                        <span className="flex items-center text-sm">
+                                            {item.email}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-4 text-xs border">
                                         <span className="px-3 py-1 font-semibold leading-tight text-white bg-[#FF2366] rounded-full">
                                             {item.role}
                                         </span>
                                     </td>
-                                    <td className="px-4 py-4 text-xs border">
-                                        <span className="px-3 py-1 font-semibold leading-tight rounded-full">
-                                            {item.department}
-                                        </span>
-                                    </td>
+
                                     <td className="px-4 py-4 text-ms font-semibold border">
                                         <div className='flex items-center gap-8'>
                                             <span className='underline text-sm cursor-pointer' onClick={() => handleDelete(item)}>
                                                 Supprimer
                                             </span>
+                                            {/* <Link href={`/Utilisateurs/${item._id}`}>
+                                                <span className='underline text-sm cursor-pointer' onClick={() => handleDelete(item)}>
+                                                    Modifier
+                                                </span>
+                                            </Link> */}
                                             {/* <Link href={`/Demandes/${item._id}`}>
                                                 <span className='underline text-sm cursor-pointer'>
                                                     Modifier
@@ -155,7 +176,16 @@ const Utilisateurs = () => {
                     </tbody>
                 </table>
                 <div className='mt-16 flex items-end justify-end'>
-                    <Pagination numbers={numbers} changePage={changePage} currentPage={currentPage} />
+                    <ReactPaginate
+                        previousLabel={"Previous"}
+                        nextLabel={"Next"}
+                        pageCount={pagecount}
+                        onPageChange={changePage}
+                        containerClassName='flex mt-10 justify-end items-end gap-5'
+                        previousLinkClassName='bg-black text-white px-2 py-2 rounded-xl'
+                        nextLinkClassName='bg-black text-white px-2 py-2 rounded-xl'
+                        activeClassName='text-[#FF2364] font-bold'
+                    />
                 </div>
             </div>
         </section>

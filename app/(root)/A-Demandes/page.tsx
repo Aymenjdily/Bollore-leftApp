@@ -6,6 +6,7 @@ import { useLoading } from "@/hooks/useLoading"
 import Link from "next/link"
 import ReactPaginate from 'react-paginate'
 import { useState, useEffect } from "react"
+import { CSVLink } from "react-csv";
 
 const Demandes = () => {
     const [user, setUser] = useState<any>()
@@ -17,7 +18,7 @@ const Demandes = () => {
         return item.creator.department === user?.data.department
     })
     const filteredDemandestoSuperAdmin = demandes && demandes?.filter((item: any) => {
-        return item.creator.role === "responsable"
+        return item.state === "accepter"
     })
     console.log(demandes)
 
@@ -27,6 +28,8 @@ const Demandes = () => {
     const pagevisited = pageNumber * peopleperpage
     const displaypeople = user && user?.data.role === "employé" && filteredDemandestoUser && filteredDemandestoUser.slice(pagevisited, pagevisited + peopleperpage) || user && user?.data.role === "responsable" && filteredDemandestoAdmin && filteredDemandestoAdmin.slice(pagevisited, pagevisited + peopleperpage) || user && user?.data.role === "RH" && filteredDemandestoSuperAdmin && filteredDemandestoSuperAdmin.slice(pagevisited, pagevisited + peopleperpage) 
     const pagecount = Math.ceil(displaypeople && displaypeople.length / peopleperpage)
+
+    const sheetData = filteredDemandestoSuperAdmin
   
     const changePage = ({ selected }: any) => {
       setpageNumber(selected)
@@ -122,12 +125,13 @@ const Demandes = () => {
                     Mes Demandes
                 </h1>
 
-                <Link href="/Demandes/create">
-                    <CustomButton
-                        type="button"
-                        title="Ajouter"
-                    />
-                </Link>
+                {
+                    sheetData && (
+                    <CSVLink data={sheetData} filename={"Demandes.xls"} className="bg-green-800 px-8 py-2 flex items-center gap-5 text-white rounded-xl">
+                        Export 
+                    </CSVLink>
+                    )
+                }
             </div>
             <div className='mt-10'>
                 <table className="w-full shadow-lg">

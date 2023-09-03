@@ -3,11 +3,11 @@ import { connectToDB } from "@/utils/connecttodb";
 import { NextRequest } from "next/server";
 
 export const POST = async (request:NextRequest) => {
-    const { userId, title, reason, type, dateDepart, dateRetour, department, state } = await request.json();
+    const { userId, reason, type, dateDepart, dateRetour, state, validator, dateReprise } = await request.json();
 
     try {
         await connectToDB();
-        const newDemande = new Demande({ creator: userId, title, reason, type, dateDepart, dateRetour, state, department });
+        const newDemande = new Demande({ creator: userId, validator, reason, type, dateDepart, dateRetour, state, dateReprise });
 
         await newDemande.save();
         return new Response(JSON.stringify(newDemande), { status: 201 })

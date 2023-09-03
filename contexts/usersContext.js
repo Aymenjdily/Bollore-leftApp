@@ -25,24 +25,10 @@ export const UsersReducer = (state, action) => {
 
 export const UsersContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(UsersReducer, {
-        users: null
+        users: []
     })
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-          const res = await fetch('/api/users')
-          const data = await res.json()
     
-          if(res.ok){
-            dispatch({
-                type:'SET_USER',
-                payload:data
-            })
-          }
-        }
-    
-        fetchUsers()
-    }, [])
     
     
     return(

@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <section className='py-5 border-b-2 border-gray-200 w-full'>
         <h1 className='text-[24px] font-bold'>
-            Reports
+          Rapports
         </h1>
     </section>
   )

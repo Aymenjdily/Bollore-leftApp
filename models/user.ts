@@ -22,12 +22,8 @@ const UserSchema = new Schema({
         required: [true, "Role is Required ! "],
     },
     department: {
-        type: String,
-        required: [true, "Department is Required ! "]
-    },
-    days: {
-        type: Number,
-        required: [true, "Left Days is Required ! "]
+        type: Schema.Types.ObjectId,
+        ref: 'Department',
     }
 }, {
     timestamps: true

@@ -8,7 +8,7 @@ connectToDB()
 export async function POST(req: NextRequest){
     try {
         const body = await req.json()
-        const {fullName, email, password, role, department, days} = body
+        const {fullName, email, password, role, department} = body
 
         const userExists = await User.findOne({email})
 
@@ -29,7 +29,6 @@ export async function POST(req: NextRequest){
             password: hashedPassword,
             role,
             department,
-            days, 
         })
 
         const savedUser = await newUser.save()

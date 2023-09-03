@@ -5,13 +5,8 @@ const DemandeSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    title: {
-        type: String,
-        required: [true, "Department Title is Required ! "]
-    },
     reason: {
         type: String,
-        required: [true, "Reason is Required ! "]
     },
     type: {
         type: String,
@@ -25,12 +20,15 @@ const DemandeSchema = new Schema({
         type: String,
         required: [true, "Date Retour is Required ! "]
     },
+    dateReprise: {
+        type: String,
+        required: [true, "Date Retour is Required ! "]
+    },
     state: {
         type: String
     },
-    department: {
-        type: String,
-        required: [true, "Department Demande is Required ! "]
+    validator: {
+        type: String
     }
 }, {
     timestamps: true

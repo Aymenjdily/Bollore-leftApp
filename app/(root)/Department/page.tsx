@@ -2,31 +2,34 @@
 
 import { CustomButton, Pagination } from '@/components/shared'
 import { useDepartment } from '@/hooks/useDepartment'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import ReactPaginate from 'react-paginate'
 
 const Page = () => {
     const { departments } = useDepartment()
-    const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 7
-    const lastIndex = currentPage * itemsPerPage
-    const firstIndex = lastIndex - itemsPerPage
-    const items = departments && departments.slice(firstIndex, lastIndex)
-    const npage = Math.ceil(departments && departments.length / itemsPerPage)
-    // @ts-ignore
-    const numbers = [...Array(npage + 1).keys()].slice(1)
-    const { dispatch } = useDepartment()
 
-    const changePage = (n:any) => {
-        setCurrentPage(n)
+    const [pageNumber, setpageNumber] = useState(0)
+    const peopleperpage = 40
+    const pagevisited = pageNumber * peopleperpage
+    const displaypeople = departments && departments.slice(pagevisited, pagevisited + peopleperpage)
+    const pagecount = Math.ceil(departments && departments.length / peopleperpage)
+  
+    const changePage = ({ selected }: any) => {
+      setpageNumber(selected)
     }
+  
+    const { dispatch } = useDepartment()
 
     const headsDepartment = [
         {
-            title: "Name"
+            title: "Titre"
         },
         {
             title: "Tag"
+        },
+        {
+            title: "Entreprise"
         },
         {
             title: "Actions"
@@ -56,11 +59,27 @@ const Page = () => {
         }
     }
 
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            const res = await fetch('/api/department')
+            const data = await res.json()
+        
+            if(res.ok){
+              dispatch({
+                  type:'SET_DEPARTMENT',
+                  payload:data
+              })
+            }
+        }
+
+        fetchDepartments()
+    }, [])
+
     return (
         <section className='py-10'>
             <div className='flex justify-between items-center'>
-                <h1 className='text-xl font-bold capitalize text-gray-500'>
-                    Department
+                <h1 className='font-bold capitalize text-gray-500'>
+                    Notre Départements
                 </h1>
                 <div>
                     <Link href="/Department/create">
@@ -86,7 +105,7 @@ const Page = () => {
                     </thead>
                     <tbody className="bg-white">
                         {
-                            items && items.map((item: any) => (
+                            displaypeople && displaypeople.map((item: any) => (
                                 <tr key={item._id} className="text-gray-700">
                                     <td className="px-4 py-4 border">
                                         <div className="flex items-center text-sm">
@@ -98,6 +117,11 @@ const Page = () => {
                                     <td className="px-4 py-4 text-xs border">
                                         <span className="px-3 py-1 font-semibold leading-tight text-white bg-[#FF2366] rounded-full">
                                             #{item.title}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-4 text-xs border">
+                                        <span className="px-3 py-1 font-semibold leading-tight text-white bg-black rounded-full">
+                                            #{item.company}
                                         </span>
                                     </td>
                                     <td className="px-4 py-4 text-ms font-semibold border">
@@ -118,7 +142,16 @@ const Page = () => {
                     </tbody>
                 </table>
                 <div className='mt-16 flex items-end justify-end'>
-                    <Pagination numbers={numbers} changePage={changePage} currentPage={currentPage} />
+                    <ReactPaginate
+                        previousLabel={"Previous"}
+                        nextLabel={"Next"}
+                        pageCount={pagecount}
+                        onPageChange={changePage}
+                        containerClassName='flex mt-10 justify-end items-end gap-5'
+                        previousLinkClassName='bg-black text-white px-2 py-2 rounded-xl'
+                        nextLinkClassName='bg-black text-white px-2 py-2 rounded-xl'
+                        activeClassName='text-[#FF2364] font-bold'
+                    />
                 </div>
             </div>
         </section>
