@@ -13,6 +13,7 @@ const CreateDemande = () => {
     const [reason, setReason] = useState('')
     const [dateDepart, setDateDepart] = useState(new Date())
     const [dateFin, setDateFin] = useState(new Date())
+    const [hours, setHours] = useState('')
     const [dateReprise, setDateReprise] = useState(new Date())
     const [type, setType] = useState('')
 
@@ -50,6 +51,7 @@ const CreateDemande = () => {
                 dateDepart: dateDepart,
                 dateRetour: dateFin,
                 dateReprise: dateReprise,
+                hours: hours,
                 state: state,
                 validator: "Non validator"
               }),
@@ -121,6 +123,16 @@ const CreateDemande = () => {
                                 state={reason}
                                 setState={setReason}
                                 title='Raison ( champs obligatoire )'
+                            />
+                        )
+                    }
+                    {
+                        type === "heures" && (
+                            <CustomInput
+                                type="text"
+                                state={hours}
+                                setState={setHours}
+                                title='Heures ( champs obligatoire )'
                             />
                         )
                     }

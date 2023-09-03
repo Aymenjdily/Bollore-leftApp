@@ -68,13 +68,13 @@ const Demandes = () => {
             title: "Id"
         },
         {
+            title: "Nom et Prénom"
+        },
+        {
             title: "Type"
         },
         {
             title: "Date départ"
-        },
-        {
-            title: "Date fin"
         },
         {
             title: "Date reprise"
@@ -157,6 +157,13 @@ const Demandes = () => {
                                                 </div>
                                             </div>
                                         </td>
+                                        <td className="px-4 py-4 border">
+                                            <div className="flex items-center text-[12px]">
+                                                <div>
+                                                    <p className="text-black">{item.creator.fullName}</p>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td className="px-4 py-4 text-xs border">
                                             <span className="px-3 py-1 font-semibold leading-tight text-white bg-[#FF2366] rounded-full">
                                                 {item.type}
@@ -165,11 +172,6 @@ const Demandes = () => {
                                         <td className="px-4 py-4 text-xs border">
                                             <span className="px-3 py-1 font-semibold leading-tight rounded-full">
                                                 {item.dateDepart}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-4 text-xs border">
-                                            <span className="px-3 py-1 font-semibold leading-tight rounded-full">
-                                                {item.dateRetour}
                                             </span>
                                         </td>
                                         <td className="px-4 py-4 text-xs border">

@@ -51,12 +51,9 @@ const Sidebar = () => {
 
     return (
         <section className='p-10 flex flex-col items-start shadow-2xl rounded-tr-2xl'>
-            <Image
-                src="/logo.png"
-                alt="logo"
-                width={200}
-                height={200}
-            />
+            <h1 className='text-center font-extrabold flex items-center justify-center text-xl text-[#FE2366]'>
+                AGL | Congé
+            </h1>
             <div className='mt-[33px] flex flex-col space-y-[30px]'>
                 {
                     user && user?.data.role == "RH" && (

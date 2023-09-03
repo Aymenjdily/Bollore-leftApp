@@ -8,6 +8,9 @@ const DemandeSchema = new Schema({
     reason: {
         type: String,
     },
+    hours: {
+        type: String,
+    },
     type: {
         type: String,
         required: [true, "Type is Required ! "]
